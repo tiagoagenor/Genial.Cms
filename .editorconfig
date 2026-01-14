@@ -1,0 +1,30 @@
+; editor configuration powered by http://editorconfig.org/
+root = true
+
+[*]
+indent_size = 2
+indent_style = space
+max_line_length = 300
+trim_trailing_whitespace = true
+insert_final_newline = true
+charset = utf-8
+
+# csharp_space_between_parentheses = expressions, type_casts, control_flow_statements
+csharp_style_var_for_built_in_types = true
+
+[*.cs]
+indent_size = 4
+dotnet_sort_system_directives_first = true
+
+csharp_preferred_modifier_order = public, private, protected, internal, static, extern, new, virtual, abstract, sealed, override, readonly, unsafe, volatile, async:suggestion
+
+# Style Definitions
+dotnet_naming_style.pascal_case_style.capitalization = pascal_case
+
+# Use PascalCase for constant fields
+dotnet_naming_rule.constant_fields_should_be_pascal_case.severity = suggestion
+dotnet_naming_rule.constant_fields_should_be_pascal_case.symbols = constant_fields
+dotnet_naming_rule.constant_fields_should_be_pascal_case.style = pascal_case_style
+dotnet_naming_symbols.constant_fields.applicable_kinds = field
+dotnet_naming_symbols.constant_fields.applicable_accessibilities = *
+dotnet_naming_symbols.constant_fields.required_modifiers = const

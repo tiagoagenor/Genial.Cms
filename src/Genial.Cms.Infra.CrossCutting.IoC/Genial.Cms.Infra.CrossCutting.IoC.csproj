@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.Oracle" Version="7.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="7.1.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.8.0" />
+    <!-- <PackageReference Include="Genial.Arquitetura.LoggerActionAPI" Version="20230817.1.0"/> -->
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.1.0"/>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Refit.HttpClientFactory" Version="7.0.0"/>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0"/>
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Genial.Cms.Application\Genial.Cms.Application.csproj"/>
+    <ProjectReference Include="..\Genial.Cms.Infra.CrossCutting.Environments\Genial.Cms.Infra.CrossCutting.Environments.csproj"/>
+    <ProjectReference Include="..\Genial.Cms.Infra.Data\Genial.Cms.Infra.Data.csproj"/>
+  </ItemGroup>
+
+</Project>
