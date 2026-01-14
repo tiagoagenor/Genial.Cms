@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="BCrypt.Net-Next" Version="4.0.3"/>
         <PackageReference Include="FluentValidation" Version="11.8.0"/>
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1"/>
         <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1"/>
@@ -14,6 +15,7 @@
     <ItemGroup>
         <ProjectReference Include="..\Genial.Cms.Domain\Genial.Cms.Domain.csproj"/>
         <ProjectReference Include="..\Genial.Cms.Infra.CrossCutting.Environments\Genial.Cms.Infra.CrossCutting.Environments.csproj"/>
+        <ProjectReference Include="..\Genial.Cms.Infra.Data\Genial.Cms.Infra.Data.csproj"/>
     </ItemGroup>
 
 

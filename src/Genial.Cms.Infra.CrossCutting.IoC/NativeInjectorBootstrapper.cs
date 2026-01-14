@@ -32,8 +32,8 @@ public static class NativeInjectorBootstrapper
     private static void RegisterEnvironments(IServiceCollection services, IConfiguration configuration)
     {
         services.AddSingleton(configuration.GetSection(nameof(DatabaseConfiguration)).Get<DatabaseConfiguration>());
-
-        var mongoDbConfiguration = configuration.GetSection("MongoDb").Get<MongoDbConfiguration>()
+        
+        var mongoDbConfiguration = configuration.GetSection("MongoDb").Get<MongoDbConfiguration>() 
             ?? new MongoDbConfiguration();
         services.AddSingleton(mongoDbConfiguration);
     }

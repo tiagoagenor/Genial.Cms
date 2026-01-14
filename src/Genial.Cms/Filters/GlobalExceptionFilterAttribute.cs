@@ -10,10 +10,10 @@ namespace Genial.Cms.Filters;
 
 public class GlobalExceptionFilterAttribute : Attribute, IExceptionFilter
 {
-    private readonly ILogger _logger;
+    private readonly ILogger<GlobalExceptionFilterAttribute> _logger;
 
     public GlobalExceptionFilterAttribute(
-        ILogger logger
+        ILogger<GlobalExceptionFilterAttribute> logger
     )
     {
         _logger = logger;
@@ -22,8 +22,26 @@ public class GlobalExceptionFilterAttribute : Attribute, IExceptionFilter
     public void OnException(ExceptionContext context)
     {
         var eventId = new EventId(188, "GlobalException");
+        var exception = context.Exception;
 
-        _logger.LogError(eventId, context.Exception, context.Exception.Message);
+        // Log completo da exceção com stack trace
+        _logger.LogError(
+            eventId,
+            exception,
+            "Exception occurred: {Message}\nStack Trace: {StackTrace}",
+            exception.Message,
+            exception.StackTrace
+        );
+
+        // Log adicional para exceções internas
+        if (exception.InnerException != null)
+        {
+            _logger.LogError(
+                "Inner Exception: {InnerMessage}\nInner Stack Trace: {InnerStackTrace}",
+                exception.InnerException.Message,
+                exception.InnerException.StackTrace
+            );
+        }
 
         var problemDetails = CustomProblemDetailsFactory.CreateProblemDetailsFromContext(
             context.HttpContext,

@@ -1,6 +1,7 @@
 using System;
 using Genial.Cms.Domain.SeedWork;
 using Genial.Cms.Infra.Data.Context;
+using Genial.Cms.Infra.Data.Repositories;
 using Genial.Cms.Infra.Data.UnitOfWork;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,5 +16,6 @@ public static class DatabaseSetup
 		services.AddDbContext<ApplicationDbContext>(ServiceLifetime.Scoped);
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<MongoDbContext>();
+        services.AddScoped<IUserRepository, UserRepository>();
 	}
 }
