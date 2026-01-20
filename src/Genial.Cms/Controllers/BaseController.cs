@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Genial.Cms.Controllers;
 
-[Route("[controller]/v{version:apiVersion}")]
+[Route("v{version:apiVersion}/[controller]")]
 [ServiceFilter(typeof(GlobalExceptionFilterAttribute))]
 [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
 [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]

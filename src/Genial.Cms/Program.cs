@@ -1,6 +1,7 @@
 using System;
 using Genial.Cms.Application.Validators;
 using Genial.Cms.Filters;
+using Genial.Cms.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Genial.Cms.Infra.CrossCutting.IoC.Configurations;
@@ -22,12 +23,15 @@ builder.Services.AddValidatorsFromAssemblyContaining(typeof(Validator<>), Servic
 builder.Services.AddLoggerAction(builder.Configuration);
 builder.Services.AddApiVersioning();
 builder.Services.AddVersionedApiExplorer();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IJwtUserService, JwtUserService>();
 builder.Services.AddControllers();
 builder.Services.AddSwaggerSetup();
 builder.Services.AddScoped<GlobalExceptionFilterAttribute>();
 builder.Services.AddDependencyInjectionSetup(builder.Configuration);
 builder.Services.AddDatabaseSetup();
 builder.Services.AddHealthCheck();
+builder.Services.AddJwtAuthentication(builder.Configuration);
 
 var app = builder.Build();
 
@@ -63,6 +67,8 @@ app.Use(async (context, next) =>
 });
 
 app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseLoggerAction(builder.Configuration);
 
 app.MapSwagger();
