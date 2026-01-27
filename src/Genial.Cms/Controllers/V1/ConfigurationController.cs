@@ -18,14 +18,17 @@ namespace Genial.Cms.Controllers.V1;
 public class ConfigurationController : BaseController
 {
     private readonly IFilesStorageConfigurationService _filesStorageConfigurationService;
+    private readonly IRedisConfigurationService _redisConfigurationService;
 
     public ConfigurationController(
         INotificationHandler<ExceptionNotification> notifications,
         IMediator bus,
-        IFilesStorageConfigurationService filesStorageConfigurationService)
+        IFilesStorageConfigurationService filesStorageConfigurationService,
+        IRedisConfigurationService redisConfigurationService)
         : base(notifications, bus)
     {
         _filesStorageConfigurationService = filesStorageConfigurationService;
+        _redisConfigurationService = redisConfigurationService;
     }
 
     [HttpGet("FilesStorage")]
@@ -70,9 +73,57 @@ public class ConfigurationController : BaseController
             Success = isConnected
         })));
     }
+
+    [HttpGet("Redis")]
+    [SwaggerOperation("Obter configuração do Redis")]
+    [ProducesResponseType(typeof(Response<GetRedisConfigurationCommandResult>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> GetRedisConfigurationAsync()
+    {
+        var response = await Bus.Send(new GetRedisConfigurationCommand());
+
+        // Sempre retorna sucesso, mesmo que não exista no banco (retorna valores padrão)
+        return CreateResponse(Ok(new Response<GetRedisConfigurationCommandResult>(response)));
+    }
+
+    [HttpPost("Redis")]
+    [SwaggerOperation("Salvar/Atualizar configuração do Redis")]
+    [ProducesResponseType(typeof(Response<SaveRedisConfigurationCommandResult>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> SaveRedisConfigurationAsync([FromBody] SaveRedisConfigurationCommand command)
+    {
+        var response = await Bus.Send(command);
+
+        if (response == null)
+        {
+            return CreateResponse(BadRequest());
+        }
+
+        return CreateResponse(Ok(new Response<SaveRedisConfigurationCommandResult>(response)));
+    }
+
+    [HttpGet("Redis/test")]
+    [SwaggerOperation("Testar conexão com Redis")]
+    [ProducesResponseType(typeof(Response<TestRedisResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> TestRedisAsync()
+    {
+        var isConnected = await _redisConfigurationService.TestConnectionAsync();
+        
+        return CreateResponse(Ok(new Response<TestRedisResponse>(new TestRedisResponse
+        {
+            Success = isConnected
+        })));
+    }
 }
 
 public class TestFilesStorageResponse
+{
+    public bool Success { get; set; }
+}
+
+public class TestRedisResponse
 {
     public bool Success { get; set; }
 }

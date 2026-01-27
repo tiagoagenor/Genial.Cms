@@ -1,9 +1,11 @@
 using System;
 using System.IO;
+using System.Linq;
 using Genial.Cms.Application.Validators;
 using Genial.Cms.Filters;
 using Genial.Cms.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
 using Genial.Cms.Infra.CrossCutting.IoC.Configurations;
 using Genial.Cms.Infra.CrossCutting.IoC.Configurations.HealthCheck;
@@ -12,6 +14,7 @@ using FluentValidation;
 using Genial.Arquitetura.LoggerActionAPI.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using System.IO.Compression;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,7 +64,25 @@ builder.Services.AddDatabaseSetup();
 builder.Services.AddHealthCheck();
 builder.Services.AddJwtAuthentication(builder.Configuration);
 
+// Configurar compressão GZIP para todas as requisições
+builder.Services.AddResponseCompression(options =>
+{
+    options.EnableForHttps = true;
+    options.Providers.Add<GzipCompressionProvider>();
+    options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+        new[] { "application/json", "application/xml", "text/plain", "text/css", "application/javascript", "text/html", "application/x-font-ttf", "image/svg+xml" }
+    );
+});
+
+builder.Services.Configure<GzipCompressionProviderOptions>(options =>
+{
+    options.Level = CompressionLevel.Optimal;
+});
+
 var app = builder.Build();
+
+// Habilitar compressão GZIP (deve vir antes de outros middlewares)
+app.UseResponseCompression();
 
 // Aplicar política CORS (permite qualquer origem)
 app.UseCors();
