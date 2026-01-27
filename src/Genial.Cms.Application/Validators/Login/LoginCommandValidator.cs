@@ -1,11 +1,11 @@
 using FluentValidation;
-using Genial.Cms.Application.Commands;
+using Genial.Cms.Application.Commands.Login;
 
-namespace Genial.Cms.Application.Validators;
+namespace Genial.Cms.Application.Validators.Login;
 
-public class RegisterUserCommandValidator : Validator<RegisterUserCommand>
+public class LoginCommandValidator : Validator<LoginCommand>
 {
-    public RegisterUserCommandValidator()
+    public LoginCommandValidator()
     {
         RuleFor(x => x.Email)
             .NotEmpty()
@@ -18,10 +18,7 @@ public class RegisterUserCommandValidator : Validator<RegisterUserCommand>
         RuleFor(x => x.Password)
             .NotEmpty()
             .WithMessage("A senha é obrigatória")
-            .WithErrorCode("003")
-            .MinimumLength(6)
-            .WithMessage("A senha deve ter no mínimo 6 caracteres")
-            .WithErrorCode("004");
+            .WithErrorCode("003");
     }
 }
 

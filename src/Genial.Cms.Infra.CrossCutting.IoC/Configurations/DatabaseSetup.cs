@@ -17,5 +17,13 @@ public static class DatabaseSetup
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<MongoDbContext>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IStageRepository, StageRepository>();
+        services.AddScoped<IFieldRepository, FieldRepository>();
+        services.AddScoped<ICollectionRepository, CollectionRepository>();
+        services.AddScoped<ICollectionFieldRepository, CollectionFieldRepository>();
+        services.AddScoped<ITypeFileRepository, TypeFileRepository>();
+        services.AddScoped<IMediaRepository, MediaRepository>();
+        services.AddScoped<IConfigurationRepository, ConfigurationRepository>();
+        services.AddScoped<ICollectionItemChangeRepository, CollectionItemChangeRepository>();
 	}
 }
